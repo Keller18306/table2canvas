@@ -1,6 +1,6 @@
 {
   "name": "@keller18306/table2canvas",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Draw table on canvas for node and browser!",
   "author": "Keller18306",
   "license": "MIT",
