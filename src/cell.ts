@@ -38,17 +38,25 @@ export function renderTr<T extends Record<string, any> = any>(ctx: NodeCanvasRen
             ctx.strokeRect(x, 0, width, height);
             ctx.stroke();
             ctx.restore();
+
             if (text !== '') {
                 ctx.save();
-                const midY = height * 0.5;
+
+                const info = ctx.measureText(text);
+                const tHeight = info.actualBoundingBoxAscent + info.actualBoundingBoxDescent;
+
+                const midY = info.actualBoundingBoxAscent + (height - tHeight) * 0.5;
                 const textWidth = getTextWidth(width, paddingL, paddingR);
+
                 if (textOverflow === 'ellipsis') {
                     const fontsize = parseFloat(textFontSize ?? fontSize) || 14;
                     text = getSubStr(text, textWidth, fontsize / 2);
                 }
+
                 ctx.textAlign = textAlign ?? 'left';
                 textColor && (ctx.fillStyle = textColor);
                 ctx.font = `${textFontWeight ?? ''} ${textFontSize ?? fontSize} ${fontFamily}`;
+
                 if (textAlign === 'center') {
                     ctx.textAlign = 'center';
                     ctx.fillText(text, x + 0.5 * width, midY, textWidth);
@@ -57,9 +65,11 @@ export function renderTr<T extends Record<string, any> = any>(ctx: NodeCanvasRen
                 } else {
                     ctx.fillText(text, x + paddingL, midY, textWidth);
                 }
+
                 ctx.restore();
             }
         }
+
         x += item.width;
     }
 }
