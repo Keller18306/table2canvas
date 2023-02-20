@@ -17,6 +17,8 @@ export interface TableOpt<T extends Record<string, any> = any> {
     textStyle?: TextStyle,
     /** Table's style */
     style?: TableStyle;
+    /** Device pixel ratio (DPR) */
+    devicePixelRatio?: number;
 }
 
 export interface IColumn<T extends Record<string, any> = any> {

@@ -18,27 +18,29 @@ const defaultStyle: Required<TableStyle> = {
 }
 
 class Table2canvas<T extends Record<string, any> = any>{
-    canvas: Canvas;
-    bgColor: string;
-    text?: string;
-    textStyle: TextStyle = { textAlign: 'center', lineHeight: 55 };
-    sourceColumns: IColumn<T>[];
-    columns: Column[];
-    flatColumns: Column[];
-    tableWidth = 0;
-    tableHeight = 55;
-    headHeight = 55;
-    dataSource: T[];
-    left = 10;
-    top = 10;
-    right = 10;
-    bottom = 10;
-    style: Required<TableStyle>;
-    padding: [number, number, number, number];
-    width: number | 'auto';
-    height: number | 'auto';
-    ctx: NodeCanvasRenderingContext2D;
-    constructor({ canvas, padding, columns = [], dataSource = [], style, bgColor, text, textStyle, width, height }: TableOpt<T>) {
+    public canvas: Canvas;
+    public bgColor: string;
+    public text?: string;
+    public textStyle: TextStyle = { textAlign: 'center', lineHeight: 55 };
+    public sourceColumns: IColumn<T>[];
+    public columns: Column[];
+    public flatColumns: Column[];
+    public tableWidth = 0;
+    public tableHeight = 55;
+    public headHeight = 55;
+    public dataSource: T[];
+    public left = 10;
+    public top = 10;
+    public right = 10;
+    public bottom = 10;
+    public style: Required<TableStyle>;
+    public padding: [number, number, number, number];
+    public width: number | 'auto';
+    public height: number | 'auto';
+    public ctx: NodeCanvasRenderingContext2D;
+    public devicePixelRatio: number = 1;
+
+    public constructor({ canvas, padding, columns = [], dataSource = [], style, bgColor, text, textStyle, width, height, devicePixelRatio }: TableOpt<T>) {
         this.canvas = canvas;
         this.sourceColumns = columns;
         this.dataSource = dataSource || [];
@@ -64,6 +66,10 @@ class Table2canvas<T extends Record<string, any> = any>{
         this.top = this.padding[0];
         this.bottom = this.padding[2];
         this.ctx = canvas.getContext('2d');
+
+        if (devicePixelRatio) {
+            this.devicePixelRatio = devicePixelRatio;
+        }
 
         this.columns = genColumns(columns, {
             width: _style.columnWidth,
@@ -134,11 +140,11 @@ class Table2canvas<T extends Record<string, any> = any>{
         const midY = top - lineHeight * 0.5;
         const width = this.canvas.width;
         if (ctx.textAlign === 'center') {
-            ctx.fillText(text, 0.5 * width, midY, tableWidth);
+            ctx.fillText(text, 0.5 * width / this.devicePixelRatio, midY, tableWidth);
         } else if (ctx.textAlign === 'right') {
-            ctx.fillText(text, width - right, midY, tableWidth);
+            ctx.fillText(text, width - right / this.devicePixelRatio, midY, tableWidth);
         } else {
-            ctx.fillText(text, left, midY, tableWidth);
+            ctx.fillText(text, left / this.devicePixelRatio, midY, tableWidth);
         }
         ctx.restore();
     }
@@ -154,7 +160,7 @@ class Table2canvas<T extends Record<string, any> = any>{
         ctx.lineWidth = 1;
     }
 
-    resize() {
+    public resize() {
         const { ctx, canvas } = this;
         const length = this.dataSource?.length || 2;
         const maxThRowNum = Math.max(...this.flatColumns.map(v => v.deep));
@@ -184,8 +190,8 @@ class Table2canvas<T extends Record<string, any> = any>{
         scale = scale || 1;
         scale = 1 / scale;
 
-        canvas.width = width * scale;
-        canvas.height = height * scale;
+        canvas.width = width * scale * this.devicePixelRatio;
+        canvas.height = height * scale * this.devicePixelRatio;
         this.initCtxStatus();
 
 
@@ -201,7 +207,7 @@ class Table2canvas<T extends Record<string, any> = any>{
         }
         ctx.restore();
 
-        ctx.scale(scale, scale);
+        ctx.scale(scale * this.devicePixelRatio, scale * this.devicePixelRatio);
     }
 
     appendData(dataSource: T[]) {
