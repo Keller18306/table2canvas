@@ -2,7 +2,7 @@
   "name": "@keller18306/table2canvas",
   "version": "0.0.1",
   "description": "Draw table on canvas for node and browser!",
-  "author": "Keller",
+  "author": "Keller18306",
   "license": "MIT",
   "type": "module",
   "types": "./esm/index.d.ts",
