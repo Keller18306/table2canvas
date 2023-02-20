@@ -2,16 +2,16 @@
 
 ## Install
 - node (Must install [canvas](https://www.npmjs.com/package/canvas "canvas"))
-`npm install canvas table2canvas` or `yarn add canvas table2canvas`
+`npm install canvas @keller18306/table2canvas` or `yarn add canvas @keller18306/table2canvas`
 
 - browser
-`npm install table2canvas` or `yarn add table2canvas`
+`npm install @keller18306/table2canvas` or `yarn add @keller18306/table2canvas`
 
 ## Usage
 - node
 ```js
 import { Canvas } from 'canvas';
-import Table2canvas from 'table2canvas';
+import Table2canvas from '@keller18306/table2canvas';
 import fs from 'fs';
 
 const columns = [
@@ -105,7 +105,7 @@ result:demo.png
 
 - browser
 ```js
-import Table2canvas from 'table2canvas';
+import Table2canvas from '@keller18306/table2canvas';
 
 const columns = [...]
 
